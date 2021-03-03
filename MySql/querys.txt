@@ -1,0 +1,40 @@
+1########################################
+
+SELECT bw.first_name,count(ba.Writer_id) FROM blog.writer as bw join blog.article as ba on bw.id = ba.Writer_id group by ba.Writer_id;
+
+
+2########################################
+
+
+SELECT bw.first_name,ba.title FROM blog.writer as bw join blog.article as ba on bw.id = ba.Writer_id where bw.first_name="ali";
+
+
+3########################################
+
+SELECT ba.title FROM blog.writer as bw 
+join blog.article as ba on bw.id = ba.Writer_id 
+join blog.category as bc on ba.Category_id = bc.id where bw.first_name="ali" and bc.title="first";
+
+4########################################
+
+SELECT bt.title,count(bt.title) FROM blog.writer as bw 
+join blog.article as ba on bw.id = ba.Writer_id
+join blog.tag as bt on ba.id=bt.id
+join blog.article_has_tag as baht on baht.tag_id = ba.id group by (bt.title);
+
+5########################################
+
+SELECT blog.category.title FROM blog.category where not blog.category.title in (SELECT bc.title FROM blog.writer as bw 
+join blog.article as ba on bw.id = ba.Writer_id 
+join blog.category as bc on ba.Category_id = bc.id) ;
+
+6########################################
+
+SELECT blog.writer.first_name FROM blog.writer where not blog.writer.first_name in (SELECT bw.first_name FROM blog.writer as bw 
+join blog.article as ba on bw.id = ba.Writer_id 
+join blog.category as bc on ba.Category_id = bc.id where bc.title="first") ;
+
+Import&Export########################################
+
+mysqldump --routines -u mohammadreza -p blog > blog.sql(Export)
+mysqldump --routines -u mohammadreza -p newdb < blog.sql(Import)
